@@ -28,6 +28,7 @@ class MakeRPMConfig extends MakeConfig {
     this.buildArch,
     this.requires,
     this.buildRequires,
+    this.specFlags,
     this.description,
     this.prep,
     this.build,
@@ -63,6 +64,7 @@ class MakeRPMConfig extends MakeConfig {
       buildArch: json['build_arch'] as String? ?? _getArchitecture(),
       requires: (json['requires'] as List<dynamic>?)?.cast<String>(),
       buildRequires: (json['build_requires'] as List<dynamic>?)?.cast<String>(),
+      specFlags: (json['spec_flags'] as List<dynamic>?)?.cast<String>(),
       description: json['description'] as String?,
       prep: json['prep'] as String?,
       build: json['build'] as String?,
@@ -99,6 +101,7 @@ class MakeRPMConfig extends MakeConfig {
   String? buildArch;
   List<String>? requires;
   List<String>? buildRequires;
+  List<String>? specFlags;
   //RPM postamble Spec file fields
   String? description;
   String? prep;
@@ -209,9 +212,14 @@ class MakeRPMConfig extends MakeConfig {
             (e) => '${e.key}=${e.value}',
           ),
     ].join('\n');
+
+    final flags = specFlags != null && specFlags!.isNotEmpty
+        ? '${specFlags!.join('\n')}\n\n'
+        : '';
+
     final map = {
       'DESKTOP': desktopFile,
-      'SPEC': '$preamble\n\n$body\n\n$inlineBody',
+      'SPEC': '$preamble\n\n$flags$body\n\n$inlineBody',
     };
     return Map.castFrom<String, String?, String, String>(map);
   }

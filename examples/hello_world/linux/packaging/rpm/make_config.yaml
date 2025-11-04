@@ -24,3 +24,9 @@ categories:
   - Awesome
 
 startup_notify: true
+
+# Custom spec file flags (optional)
+# Uncomment and customize as needed
+# spec_flags:
+#   - '%global __requires_exclude ^libcurl.so.4\\(CURL_OPENSSL_4\\).*'
+#   - '%global debug_package %{nil}'
